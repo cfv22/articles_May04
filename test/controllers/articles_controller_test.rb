@@ -1,12 +1,13 @@
 require 'test_helper'
 
 class ArticlesControllerTest < ActionDispatch::IntegrationTest
-  
+  include Devise::Test::IntegrationHelpers
 
    test "get :index is successful" do
+    puts users.class
     sign_in users(:pedro)
     get articles_path
-    assert_response :success 
+    assert_response :success
   end
   test "get index shows articles" do
     get articles_path
@@ -16,8 +17,8 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
   end
   test "get :new is successful" do
     get new_article_path
-    assert_response :success 
-   
+    assert_response :success
+
   end
 
   test "get new shows form with fields" do
@@ -27,9 +28,9 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
    assert_select "#article_body"
    assert_select "#article_published"
    assert_select "input[type=submit]"
-end 
+end
 test "post create creates a new article" do
-  assert_difference 'Article.count', 1 do 
+  assert_difference 'Article.count', 1 do
     post articles_path, params: {article: {title: "A", body: "B", published: false}}
   end
   assert_redirected_to articles_path
@@ -56,5 +57,5 @@ test "post :create doesn't create an article if title is empty" do
     assert_redirected_to articles_path
   end
 
-  
+
 end
